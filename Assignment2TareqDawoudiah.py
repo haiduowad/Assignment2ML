@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
 import seaborn as sns
 
 ############################################### EDA (A) Start ##########################################################
@@ -108,21 +107,21 @@ print("The median age for positive female cases is higher than that of males")
 
 ################################## A(3) Start
 
-correlationDataframe = excelDataFrame.filter(['Age','SexInt','ChestPainTypeInt','RestingBP','Cholesterol','FastingBS', 'RestingECGInt','MaxHR','ExerciseAnginaInt','Oldpeak','ST_SlopeInt','HeartDisease'], axis=1)
-correlationDataframe["Age"] = pd.to_numeric(correlationDataframe["Age"])
-correlationDataframe["SexInt"] = pd.to_numeric(correlationDataframe["SexInt"])
-correlationDataframe["ChestPainTypeInt"] = pd.to_numeric(correlationDataframe["ChestPainTypeInt"])
-correlationDataframe["RestingBP"] = pd.to_numeric(correlationDataframe["RestingBP"])
-correlationDataframe["Cholesterol"] = pd.to_numeric(correlationDataframe["Cholesterol"])
-correlationDataframe["FastingBS"] = pd.to_numeric(correlationDataframe["FastingBS"])
-correlationDataframe["RestingECGInt"] = pd.to_numeric(correlationDataframe["RestingECGInt"])
-correlationDataframe["MaxHR"] = pd.to_numeric(correlationDataframe["MaxHR"])
-correlationDataframe["ExerciseAnginaInt"] = pd.to_numeric(correlationDataframe["ExerciseAnginaInt"])
-correlationDataframe["Oldpeak"] = pd.to_numeric(correlationDataframe["Oldpeak"])
-correlationDataframe["ST_SlopeInt"] = pd.to_numeric(correlationDataframe["ST_SlopeInt"])
-correlationDataframe["HeartDisease"] = pd.to_numeric(correlationDataframe["HeartDisease"])
+numericDataframe = excelDataFrame.filter(['Age','SexInt','ChestPainTypeInt','RestingBP','Cholesterol','FastingBS', 'RestingECGInt','MaxHR','ExerciseAnginaInt','Oldpeak','ST_SlopeInt','HeartDisease'], axis=1)
+numericDataframe["Age"] = pd.to_numeric(numericDataframe["Age"])
+numericDataframe["SexInt"] = pd.to_numeric(numericDataframe["SexInt"])
+numericDataframe["ChestPainTypeInt"] = pd.to_numeric(numericDataframe["ChestPainTypeInt"])
+numericDataframe["RestingBP"] = pd.to_numeric(numericDataframe["RestingBP"])
+numericDataframe["Cholesterol"] = pd.to_numeric(numericDataframe["Cholesterol"])
+numericDataframe["FastingBS"] = pd.to_numeric(numericDataframe["FastingBS"])
+numericDataframe["RestingECGInt"] = pd.to_numeric(numericDataframe["RestingECGInt"])
+numericDataframe["MaxHR"] = pd.to_numeric(numericDataframe["MaxHR"])
+numericDataframe["ExerciseAnginaInt"] = pd.to_numeric(numericDataframe["ExerciseAnginaInt"])
+numericDataframe["Oldpeak"] = pd.to_numeric(numericDataframe["Oldpeak"])
+numericDataframe["ST_SlopeInt"] = pd.to_numeric(numericDataframe["ST_SlopeInt"])
+numericDataframe["HeartDisease"] = pd.to_numeric(numericDataframe["HeartDisease"])
 
-corrMatrix = correlationDataframe.corr()
+corrMatrix = numericDataframe.corr()
 sns.heatmap(corrMatrix, annot=True)
 plt.suptitle('Heat Map Between Predictor Variables')
 plt.show()
@@ -133,7 +132,45 @@ plt.show()
 
 ########################################## Feature Engineering (B) Start ###############################################
 
+################################## B(1) Start
+
+# Check for empty cells and removing them
+emptyCells = np.where(pd.isnull(excelDataFrame))
+for index in range(len(emptyCells[0])):
+    print("Empty cell found at ["+str(emptyCells[0][index])+", "+str(emptyCells[1][index])+"]")
+    print("Removing row number "+str(emptyCells[0][index]))
+    excelDataFrame = excelDataFrame.drop(emptyCells[0][index])
+
+################################## B(1) End
+
+################################## B(2) Start
+
+# Removing negative or 0 Cholesterol
+# Removing negative Oldpeak
+for index, row in excelDataFrame.iterrows():
+    if row['Cholesterol'] < 1:
+        print("Row "+str(index)+" has a 0 or negative Cholesterol. Removing it from our list.")
+        excelDataFrame = excelDataFrame.drop(index)
+    elif row['Oldpeak'] < 0:
+        print("Row "+str(index)+" has a negative Oldpeak. Removing it from our list.")
+        excelDataFrame = excelDataFrame.drop(index)
+
+################################## B(2) End
+
 ################################## B(3) Start
 ################################## B(3) End
+
+################################## B(4) Start
+# Done from lines 12 to 58
+################################## B(4) End
+
+################################## B(4) Start
+
+from sklearn.preprocessing import StandardScaler
+standardScaler = StandardScaler()
+standardScaler.fit(numericDataframe)
+scaledNumericDataframe = standardScaler.transform(numericDataframe)
+
+################################## B(4) End
 
 ########################################### Feature Engineering (B) End ################################################
