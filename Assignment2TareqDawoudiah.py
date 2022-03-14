@@ -174,3 +174,158 @@ scaledNumericDataframe = standardScaler.transform(numericDataframe)
 ################################## B(4) End
 
 ########################################### Feature Engineering (B) End ################################################
+
+######################################### Model Development I (C) Start ################################################
+
+################################## C(1) Start
+
+xDataFrame = numericDataframe.drop(['HeartDisease'], axis=1).squeeze()
+yDataFrame = numericDataframe.filter(['HeartDisease'], axis=1).squeeze()
+
+from sklearn.model_selection import train_test_split
+XTrainSet, XTestSet, yTrainSet, yTestSet = train_test_split(xDataFrame,yDataFrame, stratify=yDataFrame, test_size=0.3,random_state=0)
+
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import cross_val_score
+
+################ KNN (k=5) Start
+
+from sklearn.neighbors import KNeighborsClassifier
+KNeighborsClf = Pipeline([('clf', KNeighborsClassifier(n_neighbors=5)), ])
+KNeighborsClf.fit(XTrainSet, yTrainSet)
+
+KNeighborsClfScore = cross_val_score(KNeighborsClf, XTrainSet, yTrainSet, cv=5)
+print("The 5 fold cross validation score for KNeighborsClf is : "+str(KNeighborsClfScore))
+print("KNeighborsClf: %0.2f accuracy with a standard deviation of %0.2f" % (KNeighborsClfScore.mean(), KNeighborsClfScore.std()))
+
+from sklearn import metrics
+KNeighborsClfPredicted = KNeighborsClf.predict(XTestSet)
+print("KNeighborsClf: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), KNeighborsClfPredicted.tolist()))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+KNeighborsClfPredictedNew = KNeighborsClfPredicted.tolist()
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == KNeighborsClfPredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for KNeighborsClf")
+print("The KNeighborsClf percentage of the correct predictions is: "+str(correct/total))
+
+################ KNN (k=5) End
+
+################ SVM (kernel = rbf) Start
+
+from sklearn import svm
+SvmClf = Pipeline([('clf', svm.SVC( kernel='rbf', probability=True)), ])
+SvmClf.fit(XTrainSet, yTrainSet)
+
+SvmClfScore = cross_val_score(SvmClf, XTrainSet, yTrainSet, cv=5)
+print("\nThe 5 fold cross validation score for SvmClf is : "+str(SvmClfScore))
+print("SvmClf: %0.2f accuracy with a standard deviation of %0.2f" % (SvmClfScore.mean(), SvmClfScore.std()))
+
+SvmClfPredicted = SvmClf.predict(XTestSet)
+print("SvmClf: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), SvmClfPredicted.tolist()))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+SvmClfPredictedNew = SvmClfPredicted.tolist()
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == SvmClfPredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for SvmClf")
+print("The SvmClf percentage of the correct predictions is: "+str(correct/total))
+
+################ SVM (kernel = rbf) End
+
+################ DT Start
+
+from sklearn.tree import DecisionTreeClassifier
+DecisionTreeClassifierClf = Pipeline([('clf', DecisionTreeClassifier()), ])
+DecisionTreeClassifierClf.fit(XTrainSet, yTrainSet)
+
+DecisionTreeClassifierClfScore = cross_val_score(DecisionTreeClassifierClf, XTrainSet, yTrainSet, cv=5)
+print("\nThe 5 fold cross validation score for DecisionTreeClassifierClf is : "+str(DecisionTreeClassifierClfScore))
+print("DecisionTreeClassifierClf: %0.2f accuracy with a standard deviation of %0.2f" % (DecisionTreeClassifierClfScore.mean(), DecisionTreeClassifierClfScore.std()))
+
+DecisionTreeClassifierClfPredicted = DecisionTreeClassifierClf.predict(XTestSet)
+print("DecisionTreeClassifierClf: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), DecisionTreeClassifierClfPredicted.tolist()))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+DecisionTreeClassifierClfPredictedNew = DecisionTreeClassifierClfPredicted.tolist()
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == DecisionTreeClassifierClfPredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for DecisionTreeClassifierClf")
+print("The DecisionTreeClassifierClf percentage of the correct predictions is: "+str(correct/total))
+
+################ DT End
+
+################ XGboot Start
+
+from sklearn.ensemble import GradientBoostingClassifier
+GradientBoostingClf = Pipeline([('clf', GradientBoostingClassifier()), ])
+GradientBoostingClf.fit(XTrainSet, yTrainSet)
+
+GradientBoostingClfScore = cross_val_score(GradientBoostingClf, XTrainSet, yTrainSet, cv=5)
+print("\nThe 5 fold cross validation score for GradientBoostingClf is : "+str(GradientBoostingClfScore))
+print("GradientBoostingClf: %0.2f accuracy with a standard deviation of %0.2f" % (GradientBoostingClfScore.mean(), GradientBoostingClfScore.std()))
+
+GradientBoostingClfPredicted = GradientBoostingClf.predict(XTestSet)
+print("GradientBoostingClf: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), GradientBoostingClfPredicted.tolist()))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+GradientBoostingClfPredictedNew = GradientBoostingClfPredicted.tolist()
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == GradientBoostingClfPredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for GradientBoostingClf")
+print("The GradientBoostingClf percentage of the correct predictions is: "+str(correct/total))
+
+################ XGboot End
+
+from sklearn.ensemble import VotingClassifier
+
+MajorityVotingClf = VotingClassifier(estimators=[('KNN', KNeighborsClf), ('SVM', SvmClf), ('DT', DecisionTreeClassifierClf), ('XGboost', GradientBoostingClf)], voting='hard')
+MajorityVotingClf = MajorityVotingClf.fit(XTrainSet, yTrainSet)
+
+MajorityVotingClfScore = cross_val_score(MajorityVotingClf, XTrainSet, yTrainSet, cv=5)
+print("\nThe 5 fold cross validation score for MajorityVotingClf is : "+str(MajorityVotingClfScore))
+print("MajorityVotingClf: %0.2f accuracy with a standard deviation of %0.2f" % (MajorityVotingClfScore.mean(), MajorityVotingClfScore.std()))
+
+MajorityVotingClfPredicted = MajorityVotingClf.predict(XTestSet)
+print("MajorityVotingClf: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), MajorityVotingClfPredicted.tolist()))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+MajorityVotingClfPredictedNew = MajorityVotingClfPredicted.tolist()
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == MajorityVotingClfPredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for MajorityVotingClf")
+print("The MajorityVotingClf percentage of the correct predictions is: "+str(correct/total))
+
+################################## C(1) End
+
+########################################## Model Development I (C) End #################################################
