@@ -303,29 +303,156 @@ print("The GradientBoostingClf percentage of the correct predictions is: "+str(c
 
 from sklearn.ensemble import VotingClassifier
 
-MajorityVotingClf = VotingClassifier(estimators=[('KNN', KNeighborsClf), ('SVM', SvmClf), ('DT', DecisionTreeClassifierClf), ('XGboost', GradientBoostingClf)], voting='hard')
-MajorityVotingClf = MajorityVotingClf.fit(XTrainSet, yTrainSet)
+MajorityVotingSoftClf = VotingClassifier(estimators=[('KNN', KNeighborsClf), ('SVM', SvmClf), ('DT', DecisionTreeClassifierClf), ('XGboost', GradientBoostingClf)], voting='soft')
+MajorityVotingSoftClf = MajorityVotingSoftClf.fit(XTrainSet, yTrainSet)
 
-MajorityVotingClfScore = cross_val_score(MajorityVotingClf, XTrainSet, yTrainSet, cv=5)
-print("\nThe 5 fold cross validation score for MajorityVotingClf is : "+str(MajorityVotingClfScore))
-print("MajorityVotingClf: %0.2f accuracy with a standard deviation of %0.2f" % (MajorityVotingClfScore.mean(), MajorityVotingClfScore.std()))
+MajorityVotingHardClf = VotingClassifier(estimators=[('KNN', KNeighborsClf), ('SVM', SvmClf), ('DT', DecisionTreeClassifierClf), ('XGboost', GradientBoostingClf)], voting='hard')
+MajorityVotingHardClf = MajorityVotingHardClf.fit(XTrainSet, yTrainSet)
 
-MajorityVotingClfPredicted = MajorityVotingClf.predict(XTestSet)
-print("MajorityVotingClf: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), MajorityVotingClfPredicted.tolist()))
+MajorityVotingSoftClfScore = cross_val_score(MajorityVotingSoftClf, XTrainSet, yTrainSet, cv=5)
+print("\nThe 5 fold cross validation score for MajorityVotingSoftClf is : "+str(MajorityVotingSoftClfScore))
+print("MajorityVotingSoftClf: %0.2f accuracy with a standard deviation of %0.2f" % (MajorityVotingSoftClfScore.mean(), MajorityVotingSoftClfScore.std()))
+
+MajorityVotingSoftClfPredicted = MajorityVotingSoftClf.predict(XTestSet)
+print("MajorityVotingSoftClf: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), MajorityVotingSoftClfPredicted.tolist()))
 
 # Getting number of correct predictions and percentage
 correct = 0
 total = 0
 yTestSetNew = yTestSet.tolist()
-MajorityVotingClfPredictedNew = MajorityVotingClfPredicted.tolist()
+MajorityVotingSoftClfPredictedNew = MajorityVotingSoftClfPredicted.tolist()
 for result in range(len(yTestSetNew)):
     total = total + 1
-    if yTestSetNew[result] == MajorityVotingClfPredictedNew[result]:
+    if yTestSetNew[result] == MajorityVotingSoftClfPredictedNew[result]:
         correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for MajorityVotingClf")
-print("The MajorityVotingClf percentage of the correct predictions is: "+str(correct/total))
+print(str(correct)+" correct predictions out of "+str(total)+" for MajorityVotingSoftClf")
+print("The MajorityVotingSoftClf percentage of the correct predictions is: "+str(correct/total))
+
+MajorityVotingHardClfScore = cross_val_score(MajorityVotingHardClf, XTrainSet, yTrainSet, cv=5)
+print("\nThe 5 fold cross validation score for MajorityVotingHardClf is : "+str(MajorityVotingHardClfScore))
+print("MajorityVotingHardClf: %0.2f accuracy with a standard deviation of %0.2f" % (MajorityVotingHardClfScore.mean(), MajorityVotingHardClfScore.std()))
+
+MajorityVotingHardClfPredicted = MajorityVotingHardClf.predict(XTestSet)
+print("MajorityVotingHardClf: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), MajorityVotingHardClfPredicted.tolist()))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+MajorityVotingHardClfPredictedNew = MajorityVotingHardClfPredicted.tolist()
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == MajorityVotingHardClfPredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for MajorityVotingHardClf")
+print("The MajorityVotingHardClf percentage of the correct predictions is: "+str(correct/total))
 
 ################################## C(1) End
 
 ########################################## Model Development I (C) End #################################################
+
+####################################### Model Development II (D) Start #################################################
+
+################################## D(1) Start
+
+from keras.models import Sequential
+from keras.layers import Dense
+
+# Model 1: ReLU for first 2 layers, output layer is sigmoid to get outputs between 0 and 1
+kerasModel = Sequential()
+kerasModel.add(Dense(12, input_dim=11, activation='relu'))
+kerasModel.add(Dense(8, activation='relu'))
+kerasModel.add(Dense(1, activation='sigmoid'))
+
+# Model 2: Tanh for first 2 layers, output layer is sigmoid to get outputs between 0 and 1
+kerasModel2 = Sequential()
+kerasModel2.add(Dense(12, input_dim=11, activation='tanh'))
+kerasModel2.add(Dense(8, activation='tanh'))
+kerasModel2.add(Dense(1, activation='sigmoid'))
+
+# Model 3: Sigmoid for first 2 layers, output layer is sigmoid to get outputs between 0 and 1
+kerasModel3 = Sequential()
+kerasModel3.add(Dense(12, input_dim=11, activation='sigmoid'))
+kerasModel3.add(Dense(8, activation='sigmoid'))
+kerasModel3.add(Dense(1, activation='sigmoid'))
+
+kerasModel.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+kerasModel.fit(XTrainSet, yTrainSet, epochs=150, batch_size=10)
+
+kerasModel2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+kerasModel2.fit(XTrainSet, yTrainSet, epochs=150, batch_size=10)
+
+kerasModel3.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+kerasModel3.fit(XTrainSet, yTrainSet, epochs=150, batch_size=10)
+
+# Getting model accuracy
+_, accuracy = kerasModel.evaluate(XTrainSet, yTrainSet)
+print('\nAccuracy of kerasModelReLU: %.2f' % (accuracy*100))
+
+# Getting classification report
+kerasModelPredicted = kerasModel.predict(XTestSet)
+kerasModelPredicted = [round(x[0]) for x in kerasModelPredicted]
+print("kerasModelReLU: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), kerasModelPredicted))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+kerasModelPredictedNew = kerasModelPredicted
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == kerasModelPredicted[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for kerasModelReLU")
+print("The kerasModelReLU percentage of the correct predictions is: "+str(correct/total))
+
+# Getting model accuracy
+_, accuracy2 = kerasModel2.evaluate(XTrainSet, yTrainSet)
+print('\nAccuracy of kerasModelTanh: %.2f' % (accuracy2*100))
+
+# Getting classification report
+kerasModel2Predicted = kerasModel2.predict(XTestSet)
+kerasModel2Predicted = [round(x[0]) for x in kerasModel2Predicted]
+print("kerasModelTanh: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), kerasModel2Predicted))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+kerasModel2PredictedNew = kerasModel2Predicted
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == kerasModel2PredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for kerasModelTanh")
+print("The kerasModelTanh percentage of the correct predictions is: "+str(correct/total))
+
+# Getting model accuracy
+_, accuracy3 = kerasModel3.evaluate(XTrainSet, yTrainSet)
+print('\nAccuracy of kerasModelSigmoid: %.2f' % (accuracy3*100))
+
+# Getting classification report
+kerasModel3Predicted = kerasModel3.predict(XTestSet)
+kerasModel3Predicted = [round(x[0]) for x in kerasModel3Predicted]
+print("kerasModelSigmoid: Classification report:")
+print(metrics.classification_report(yTestSet.to_numpy().tolist(), kerasModel3Predicted))
+
+# Getting number of correct predictions and percentage
+correct = 0
+total = 0
+yTestSetNew = yTestSet.tolist()
+kerasModel3PredictedNew = kerasModel3Predicted
+for result in range(len(yTestSetNew)):
+    total = total + 1
+    if yTestSetNew[result] == kerasModel3PredictedNew[result]:
+        correct = correct + 1
+print(str(correct)+" correct predictions out of "+str(total)+" for kerasModelSigmoid")
+print("The kerasModelSigmoid percentage of the correct predictions is: "+str(correct/total))
+
+################################## D(1) End
+
+######################################### Model Development II (D) End #################################################
