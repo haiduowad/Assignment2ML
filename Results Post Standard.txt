@@ -1,0 +1,133 @@
+The 5 fold cross validation score for KNeighborsClf is : [0.85271318 0.85271318 0.8125     0.875      0.90625   ]
+KNeighborsClf: 0.86 accuracy with a standard deviation of 0.03
+KNeighborsClf: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.85      0.89      0.87       123
+           1       0.91      0.88      0.89       153
+
+    accuracy                           0.88       276
+   macro avg       0.88      0.88      0.88       276
+weighted avg       0.88      0.88      0.88       276
+
+243 correct predictions out of 276 for KNeighborsClf
+The KNeighborsClf percentage of the correct predictions is: 0.8804347826086957
+
+The 5 fold cross validation score for SvmClf is : [0.84496124 0.8372093  0.859375   0.859375   0.8828125 ]
+SvmClf: 0.86 accuracy with a standard deviation of 0.02
+SvmClf: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.85      0.85      0.85       123
+           1       0.88      0.88      0.88       153
+
+    accuracy                           0.86       276
+   macro avg       0.86      0.86      0.86       276
+weighted avg       0.86      0.86      0.86       276
+
+238 correct predictions out of 276 for SvmClf
+The SvmClf percentage of the correct predictions is: 0.8623188405797102
+
+The 5 fold cross validation score for DecisionTreeClassifierClf is : [0.7751938  0.79069767 0.796875   0.765625   0.765625  ]
+DecisionTreeClassifierClf: 0.78 accuracy with a standard deviation of 0.01
+DecisionTreeClassifierClf: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.75      0.80      0.77       123
+           1       0.83      0.78      0.81       153
+
+    accuracy                           0.79       276
+   macro avg       0.79      0.79      0.79       276
+weighted avg       0.79      0.79      0.79       276
+
+218 correct predictions out of 276 for DecisionTreeClassifierClf
+The DecisionTreeClassifierClf percentage of the correct predictions is: 0.7898550724637681
+
+The 5 fold cross validation score for GradientBoostingClf is : [0.80620155 0.88372093 0.8515625  0.890625   0.8828125 ]
+GradientBoostingClf: 0.86 accuracy with a standard deviation of 0.03
+GradientBoostingClf: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.84      0.85      0.84       123
+           1       0.88      0.87      0.87       153
+
+    accuracy                           0.86       276
+   macro avg       0.86      0.86      0.86       276
+weighted avg       0.86      0.86      0.86       276
+
+237 correct predictions out of 276 for GradientBoostingClf
+The GradientBoostingClf percentage of the correct predictions is: 0.8586956521739131
+
+The 5 fold cross validation score for MajorityVotingSoftClf is : [0.82170543 0.84496124 0.84375    0.859375   0.8828125 ]
+MajorityVotingSoftClf: 0.85 accuracy with a standard deviation of 0.02
+MajorityVotingSoftClf: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.83      0.86      0.84       123
+           1       0.89      0.86      0.87       153
+
+    accuracy                           0.86       276
+   macro avg       0.86      0.86      0.86       276
+weighted avg       0.86      0.86      0.86       276
+
+237 correct predictions out of 276 for MajorityVotingSoftClf
+The MajorityVotingSoftClf percentage of the correct predictions is: 0.8586956521739131
+
+The 5 fold cross validation score for MajorityVotingHardClf is : [0.8372093  0.85271318 0.84375    0.890625   0.8828125 ]
+MajorityVotingHardClf: 0.86 accuracy with a standard deviation of 0.02
+MajorityVotingHardClf: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.82      0.88      0.85       123
+           1       0.90      0.85      0.87       153
+
+    accuracy                           0.86       276
+   macro avg       0.86      0.86      0.86       276
+weighted avg       0.86      0.86      0.86       276
+
+238 correct predictions out of 276 for MajorityVotingHardClf
+The MajorityVotingHardClf percentage of the correct predictions is: 0.8623188405797102
+
+Accuracy of kerasModelReLU: 91.28
+kerasModelReLU: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.82      0.85      0.84       123
+           1       0.88      0.85      0.86       153
+
+    accuracy                           0.85       276
+   macro avg       0.85      0.85      0.85       276
+weighted avg       0.85      0.85      0.85       276
+
+235 correct predictions out of 276 for kerasModelReLU
+The kerasModelReLU percentage of the correct predictions is: 0.8514492753623188
+
+Accuracy of kerasModelTanh: 92.83
+kerasModelTanh: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.80      0.86      0.83       123
+           1       0.88      0.82      0.85       153
+
+    accuracy                           0.84       276
+   macro avg       0.84      0.84      0.84       276
+weighted avg       0.84      0.84      0.84       276
+
+232 correct predictions out of 276 for kerasModelTanh
+The kerasModelTanh percentage of the correct predictions is: 0.8405797101449275
+
+Accuracy of kerasModelSigmoid: 87.23
+kerasModelSigmoid: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.83      0.85      0.84       123
+           1       0.88      0.86      0.87       153
+
+    accuracy                           0.86       276
+   macro avg       0.86      0.86      0.86       276
+weighted avg       0.86      0.86      0.86       276
+
+237 correct predictions out of 276 for kerasModelSigmoid
+The kerasModelSigmoid percentage of the correct predictions is: 0.8586956521739131
+
+Process finished with exit code 0

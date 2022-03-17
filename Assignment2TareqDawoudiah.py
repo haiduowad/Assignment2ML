@@ -170,6 +170,7 @@ from sklearn.preprocessing import StandardScaler
 standardScaler = StandardScaler()
 standardScaler.fit(numericDataframe)
 scaledNumericDataframe = standardScaler.transform(numericDataframe)
+scaledNumericDataframe = pd.DataFrame(scaledNumericDataframe, columns = ['Age','SexInt','ChestPainTypeInt','RestingBP','Cholesterol','FastingBS', 'RestingECGInt','MaxHR','ExerciseAnginaInt','Oldpeak','ST_SlopeInt','HeartDisease'])
 
 ################################## B(4) End
 
@@ -179,7 +180,7 @@ scaledNumericDataframe = standardScaler.transform(numericDataframe)
 
 ################################## C(1) Start
 
-xDataFrame = numericDataframe.drop(['HeartDisease'], axis=1).squeeze()
+xDataFrame = scaledNumericDataframe.drop(['HeartDisease'], axis=1).squeeze()
 yDataFrame = numericDataframe.filter(['HeartDisease'], axis=1).squeeze()
 
 from sklearn.model_selection import train_test_split
