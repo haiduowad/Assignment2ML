@@ -27,23 +27,24 @@ weighted avg       0.86      0.86      0.86       276
 
 238 correct predictions out of 276 for SvmClf
 The SvmClf percentage of the correct predictions is: 0.8623188405797102
+Optimal depth of the decision tree:  {'max_depth': 5}
 
-The 5 fold cross validation score for DecisionTreeClassifierClf is : [0.7751938  0.79069767 0.796875   0.765625   0.765625  ]
-DecisionTreeClassifierClf: 0.78 accuracy with a standard deviation of 0.01
+The 5 fold cross validation score for DecisionTreeClassifierClf is : [0.86046512 0.82170543 0.8515625  0.8359375  0.859375  ]
+DecisionTreeClassifierClf: 0.85 accuracy with a standard deviation of 0.01
 DecisionTreeClassifierClf: Classification report:
               precision    recall  f1-score   support
 
-           0       0.75      0.80      0.77       123
-           1       0.83      0.78      0.81       153
+           0       0.82      0.83      0.82       123
+           1       0.86      0.85      0.86       153
 
-    accuracy                           0.79       276
-   macro avg       0.79      0.79      0.79       276
-weighted avg       0.79      0.79      0.79       276
+    accuracy                           0.84       276
+   macro avg       0.84      0.84      0.84       276
+weighted avg       0.84      0.84      0.84       276
 
-218 correct predictions out of 276 for DecisionTreeClassifierClf
-The DecisionTreeClassifierClf percentage of the correct predictions is: 0.7898550724637681
+232 correct predictions out of 276 for DecisionTreeClassifierClf
+The DecisionTreeClassifierClf percentage of the correct predictions is: 0.8405797101449275
 
-The 5 fold cross validation score for GradientBoostingClf is : [0.80620155 0.88372093 0.8515625  0.890625   0.8828125 ]
+The 5 fold cross validation score for GradientBoostingClf is : [0.80620155 0.88372093 0.8515625  0.890625   0.890625  ]
 GradientBoostingClf: 0.86 accuracy with a standard deviation of 0.03
 GradientBoostingClf: Classification report:
               precision    recall  f1-score   support
@@ -58,66 +59,9 @@ weighted avg       0.86      0.86      0.86       276
 237 correct predictions out of 276 for GradientBoostingClf
 The GradientBoostingClf percentage of the correct predictions is: 0.8586956521739131
 
-The 5 fold cross validation score for MajorityVotingSoftClf is : [0.82170543 0.84496124 0.84375    0.859375   0.8828125 ]
-MajorityVotingSoftClf: 0.85 accuracy with a standard deviation of 0.02
+The 5 fold cross validation score for MajorityVotingSoftClf is : [0.87596899 0.86046512 0.859375   0.875      0.890625  ]
+MajorityVotingSoftClf: 0.87 accuracy with a standard deviation of 0.01
 MajorityVotingSoftClf: Classification report:
-              precision    recall  f1-score   support
-
-           0       0.83      0.86      0.84       123
-           1       0.89      0.86      0.87       153
-
-    accuracy                           0.86       276
-   macro avg       0.86      0.86      0.86       276
-weighted avg       0.86      0.86      0.86       276
-
-237 correct predictions out of 276 for MajorityVotingSoftClf
-The MajorityVotingSoftClf percentage of the correct predictions is: 0.8586956521739131
-
-The 5 fold cross validation score for MajorityVotingHardClf is : [0.8372093  0.85271318 0.84375    0.890625   0.8828125 ]
-MajorityVotingHardClf: 0.86 accuracy with a standard deviation of 0.02
-MajorityVotingHardClf: Classification report:
-              precision    recall  f1-score   support
-
-           0       0.82      0.88      0.85       123
-           1       0.90      0.85      0.87       153
-
-    accuracy                           0.86       276
-   macro avg       0.86      0.86      0.86       276
-weighted avg       0.86      0.86      0.86       276
-
-238 correct predictions out of 276 for MajorityVotingHardClf
-The MajorityVotingHardClf percentage of the correct predictions is: 0.8623188405797102
-
-Accuracy of kerasModelReLU: 91.28
-kerasModelReLU: Classification report:
-              precision    recall  f1-score   support
-
-           0       0.82      0.85      0.84       123
-           1       0.88      0.85      0.86       153
-
-    accuracy                           0.85       276
-   macro avg       0.85      0.85      0.85       276
-weighted avg       0.85      0.85      0.85       276
-
-235 correct predictions out of 276 for kerasModelReLU
-The kerasModelReLU percentage of the correct predictions is: 0.8514492753623188
-
-Accuracy of kerasModelTanh: 92.83
-kerasModelTanh: Classification report:
-              precision    recall  f1-score   support
-
-           0       0.80      0.86      0.83       123
-           1       0.88      0.82      0.85       153
-
-    accuracy                           0.84       276
-   macro avg       0.84      0.84      0.84       276
-weighted avg       0.84      0.84      0.84       276
-
-232 correct predictions out of 276 for kerasModelTanh
-The kerasModelTanh percentage of the correct predictions is: 0.8405797101449275
-
-Accuracy of kerasModelSigmoid: 87.23
-kerasModelSigmoid: Classification report:
               precision    recall  f1-score   support
 
            0       0.83      0.85      0.84       123
@@ -127,7 +71,64 @@ kerasModelSigmoid: Classification report:
    macro avg       0.86      0.86      0.86       276
 weighted avg       0.86      0.86      0.86       276
 
-237 correct predictions out of 276 for kerasModelSigmoid
-The kerasModelSigmoid percentage of the correct predictions is: 0.8586956521739131
+237 correct predictions out of 276 for MajorityVotingSoftClf
+The MajorityVotingSoftClf percentage of the correct predictions is: 0.8586956521739131
 
-Process finished with exit code 0
+The 5 fold cross validation score for MajorityVotingHardClf is : [0.85271318 0.85271318 0.8515625  0.890625   0.8828125 ]
+MajorityVotingHardClf: 0.87 accuracy with a standard deviation of 0.02
+MajorityVotingHardClf: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.83      0.89      0.86       123
+           1       0.90      0.86      0.88       153
+
+    accuracy                           0.87       276
+   macro avg       0.87      0.87      0.87       276
+weighted avg       0.87      0.87      0.87       276
+
+240 correct predictions out of 276 for MajorityVotingHardClf
+The MajorityVotingHardClf percentage of the correct predictions is: 0.8695652173913043
+
+Accuracy of kerasModelReLU: 93.15
+kerasModelReLU: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.83      0.86      0.84       123
+           1       0.89      0.86      0.87       153
+
+    accuracy                           0.86       276
+   macro avg       0.86      0.86      0.86       276
+weighted avg       0.86      0.86      0.86       276
+
+237 correct predictions out of 276 for kerasModelReLU
+The kerasModelReLU percentage of the correct predictions is: 0.8586956521739131
+21/21 [==============================] - 0s 505us/step - loss: 0.2100 - accuracy: 0.9268
+
+Accuracy of kerasModelTanh: 92.68
+kerasModelTanh: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.80      0.86      0.83       123
+           1       0.88      0.83      0.86       153
+
+    accuracy                           0.84       276
+   macro avg       0.84      0.85      0.84       276
+weighted avg       0.85      0.84      0.84       276
+
+233 correct predictions out of 276 for kerasModelTanh
+The kerasModelTanh percentage of the correct predictions is: 0.8442028985507246
+21/21 [==============================] - 0s 502us/step - loss: 0.3303 - accuracy: 0.8738
+
+Accuracy of kerasModelSigmoid: 87.38
+kerasModelSigmoid: Classification report:
+              precision    recall  f1-score   support
+
+           0       0.83      0.85      0.84       123
+           1       0.88      0.86      0.87       153
+
+    accuracy                           0.86       276
+   macro avg       0.85      0.85      0.85       276
+weighted avg       0.86      0.86      0.86       276
+
+236 correct predictions out of 276 for kerasModelSigmoid
+The kerasModelSigmoid percentage of the correct predictions is: 0.855072463768116

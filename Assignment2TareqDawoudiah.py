@@ -249,7 +249,16 @@ print("The SvmClf percentage of the correct predictions is: "+str(correct/total)
 ################ DT Start
 
 from sklearn.tree import DecisionTreeClassifier
-DecisionTreeClassifierClf = Pipeline([('clf', DecisionTreeClassifier()), ])
+
+# Finding optimal tree
+from sklearn.model_selection import GridSearchCV
+DecisionTreeClassifierClfGrid = DecisionTreeClassifier()
+gridParameters = {'max_depth': [1, 3, 5, 7, 9, 11, 13, 15]}
+DecisionTreeClassifierClfGirdScore = GridSearchCV(DecisionTreeClassifierClfGrid, param_grid=gridParameters, cv=5)
+DecisionTreeClassifierClfGirdScore.fit(XTrainSet, yTrainSet)
+print("Optimal depth of the decision tree: ",DecisionTreeClassifierClfGirdScore.best_params_)
+
+DecisionTreeClassifierClf = Pipeline([('clf', DecisionTreeClassifier(max_depth=5)), ])
 DecisionTreeClassifierClf.fit(XTrainSet, yTrainSet)
 
 DecisionTreeClassifierClfScore = cross_val_score(DecisionTreeClassifierClf, XTrainSet, yTrainSet, cv=5)
