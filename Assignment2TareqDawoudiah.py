@@ -194,7 +194,7 @@ from sklearn.metrics import confusion_matrix
 # Function that gets the cross validation score
 def getCrossValScore(clfName, name):
     score = cross_val_score(clfName, XTrainSet, yTrainSet, cv=5)
-    print("The 5 fold cross validation score for "+name+" is : " + str(score))
+    print("\nThe 5 fold cross validation score for "+name+" is : " + str(score))
     print(name+": %0.2f accuracy with a standard deviation of %0.2f" % (score.mean(), score.std()))
 
 # Function that gets the classification report
@@ -434,24 +434,93 @@ print(kerasModel3Cm)
 
 ################################## E(1) Start
 
-# def getReportParameters(clfName):
-#     total = sum(sum(clfName))
-#     accuracy = (clfName[0, 0] + clfName[1, 1]) / clfName
-#     percision = clfName[1, 1] / (clfName[1, 1] + clfName[0, 1])
-#     recall = clfName[1, 1] / (clfName[1, 0] + clfName[1, 1])
-#     f1 = 2 * (recall * percision) / (recall + percision)
-#     support = clfName[0, 0] / (clfName[0, 0] + clfName[0, 1])
-#     return total, accuracy, percision, recall, f1, support
-#
-# KNeighborsClfTotal, KNeighborsClfAccuracy, KNeighborsClfPercision, KNeighborsClfRecall, KNeighborsClfF1, KNeighborsClfSupport = getReportParameters(KNeighborsClf)
-#
-# print(KNeighborsClfTotal)
-# print(KNeighborsClfAccuracy)
-# print(KNeighborsClfPercision)
-# print(KNeighborsClfRecall)
-# print(KNeighborsClfF1)
-# print(KNeighborsClfSupport)
+# Function that retrieves the classification report details
+def getReportParameters(predicted):
+    try:
+        reportDict = metrics.classification_report(yTestSet.to_numpy().tolist(), predicted.tolist(), output_dict=True)
+    except AttributeError:
+        reportDict = metrics.classification_report(yTestSet.to_numpy().tolist(), predicted, output_dict=True)
+    dataList = []
+    reportAccurarcy = reportDict["accuracy"]
+    reportPercision = reportDict["weighted avg"]["precision"]
+    reportRecall = reportDict["weighted avg"]["recall"]
+    reportF1 = reportDict["weighted avg"]["f1-score"]
+    dataList.append(reportAccurarcy)
+    dataList.append(reportPercision)
+    dataList.append(reportRecall)
+    dataList.append(reportF1)
+    return dataList
+
+# Getting classification report details for all classifiers
+KNeighborsClfData  = getReportParameters(KNeighborsClfPredicted)
+SvmClfData  = getReportParameters(SvmClfPredicted)
+DecisionTreeClassifierClfData  = getReportParameters(DecisionTreeClassifierClfPredicted)
+GradientBoostingClfData = getReportParameters(GradientBoostingClfPredicted)
+MajorityVotingSoftClfData = getReportParameters(MajorityVotingSoftClfPredicted)
+MajorityVotingHardClfData = getReportParameters(MajorityVotingHardClfPredicted)
+kerasModelReLUData = getReportParameters(kerasModelPredicted)
+kerasModelTanhData = getReportParameters(kerasModel2Predicted)
+kerasModelSigmoidData = getReportParameters(kerasModel3Predicted)
+
+# Getting data to plot
+algoName = ['KNeighborsClf', 'SvmClf', 'DecisionTreeClassifierClf','GradientBoostingClf','MajorityVotingSoftClf','MajorityVotingHardClf','kerasModelReLU','kerasModelTanh','kerasModelSigmoid']
+algoAccuracy = [KNeighborsClfData[0], SvmClfData[0], DecisionTreeClassifierClfData[0], GradientBoostingClfData[0], MajorityVotingSoftClfData[0], MajorityVotingHardClfData[0], kerasModelReLUData[0], kerasModelTanhData[0], kerasModelSigmoidData[0]]
+algoPrecision = [KNeighborsClfData[1], SvmClfData[1], DecisionTreeClassifierClfData[1], GradientBoostingClfData[1], MajorityVotingSoftClfData[1], MajorityVotingHardClfData[1], kerasModelReLUData[1], kerasModelTanhData[1], kerasModelSigmoidData[1]]
+algoRecall = [KNeighborsClfData[2], SvmClfData[2], DecisionTreeClassifierClfData[2], GradientBoostingClfData[2], MajorityVotingSoftClfData[2], MajorityVotingHardClfData[2], kerasModelReLUData[2], kerasModelTanhData[2], kerasModelSigmoidData[2]]
+algoF1 = [KNeighborsClfData[3], SvmClfData[3], DecisionTreeClassifierClfData[3], GradientBoostingClfData[3], MajorityVotingSoftClfData[3], MajorityVotingHardClfData[3], kerasModelReLUData[3], kerasModelTanhData[3], kerasModelSigmoidData[3]]
+
+# Plotting Accuracy
+plt.bar(algoName, algoAccuracy)
+plt.xlabel("Classifiers")
+plt.ylabel("Accuracy")
+plt.title("Accuracy of Classifiers")
+plt.show()
+
+# Plotting Precision
+plt.bar(algoName, algoPrecision)
+plt.xlabel("Classifiers")
+plt.ylabel("Precision")
+plt.title("Precision of Classifiers")
+plt.show()
+
+# Plotting Recall
+plt.bar(algoName, algoRecall)
+plt.xlabel("Classifiers")
+plt.ylabel("Recall")
+plt.title("Recall of Classifiers")
+plt.show()
+
+# Plotting Recall
+plt.bar(algoName, algoF1)
+plt.xlabel("Classifiers")
+plt.ylabel("Recall")
+plt.title("F1 of Classifiers")
+plt.show()
 
 ################################## E(1) End
+
+################################## E(2) Start
+
+# Getting the index of the max/min per category
+maxAccuracyIndex = algoAccuracy.index(max(algoAccuracy))
+minAccuracyIndex = algoAccuracy.index(min(algoAccuracy))
+maxPrecisionIndex = algoPrecision.index(max(algoPrecision))
+minPrecisionIndex = algoPrecision.index(min(algoPrecision))
+maxRecallIndex = algoRecall.index(max(algoRecall))
+minRecallIndex = algoRecall.index(min(algoRecall))
+maxF1Index = algoF1.index(max(algoF1))
+minF1Index = algoF1.index(min(algoF1))
+
+# Printing results
+print("\n"+algoName[maxAccuracyIndex]+" has the highest accuracy")
+print(algoName[minAccuracyIndex]+" has the lowest accuracy")
+print(algoName[maxPrecisionIndex]+" has the highest precision")
+print(algoName[minPrecisionIndex]+" has the lowest precision")
+print(algoName[maxRecallIndex]+" has the highest recall")
+print(algoName[minRecallIndex]+" has the lowest recall")
+print(algoName[maxF1Index]+" has the highest F1")
+print(algoName[minF1Index]+" has the lowest F1")
+
+################################## E(2) End
 
 ############################################# Model Comparison (E) End #################################################
