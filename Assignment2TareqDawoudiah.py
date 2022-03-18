@@ -188,33 +188,51 @@ XTrainSet, XTestSet, yTrainSet, yTestSet = train_test_split(xDataFrame,yDataFram
 
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_val_score
+from sklearn import metrics
+
+# Function that gets the cross validation score
+def getCrossValScore(clfName, name):
+    score = cross_val_score(clfName, XTrainSet, yTrainSet, cv=5)
+    print("The 5 fold cross validation score for "+name+" is : " + str(score))
+    print(name+": %0.2f accuracy with a standard deviation of %0.2f" % (score.mean(), score.std()))
+
+# Function that gets the classification report
+def getClassificationReport(predicted, name):
+    print(name+": Classification report:")
+    try:
+        print(metrics.classification_report(yTestSet.to_numpy().tolist(), predicted.tolist()))
+    except AttributeError:
+        print(metrics.classification_report(yTestSet.to_numpy().tolist(), predicted))
+
+# Getting number of correct guesses
+def getCorrectGuesses(predicted, name):
+    correct = 0
+    total = 0
+    yTestSetNew = yTestSet.tolist()
+    try:
+        predictedNew = predicted.tolist()
+    except AttributeError:
+        predictedNew = predicted
+    for result in range(len(yTestSetNew)):
+        total = total + 1
+        if yTestSetNew[result] == predictedNew[result]:
+            correct = correct + 1
+    print(str(correct) + " correct predictions out of " + str(total) + " for "+name)
+    print("The "+name+" percentage of the correct predictions is: " + str(correct / total))
 
 ################ KNN (k=5) Start
 
 from sklearn.neighbors import KNeighborsClassifier
 KNeighborsClf = Pipeline([('clf', KNeighborsClassifier(n_neighbors=5)), ])
 KNeighborsClf.fit(XTrainSet, yTrainSet)
-
-KNeighborsClfScore = cross_val_score(KNeighborsClf, XTrainSet, yTrainSet, cv=5)
-print("The 5 fold cross validation score for KNeighborsClf is : "+str(KNeighborsClfScore))
-print("KNeighborsClf: %0.2f accuracy with a standard deviation of %0.2f" % (KNeighborsClfScore.mean(), KNeighborsClfScore.std()))
-
-from sklearn import metrics
 KNeighborsClfPredicted = KNeighborsClf.predict(XTestSet)
-print("KNeighborsClf: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), KNeighborsClfPredicted.tolist()))
 
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-KNeighborsClfPredictedNew = KNeighborsClfPredicted.tolist()
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == KNeighborsClfPredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for KNeighborsClf")
-print("The KNeighborsClf percentage of the correct predictions is: "+str(correct/total))
+# Getting the cross validations score
+getCrossValScore(KNeighborsClf, "KNeighborsClf")
+# Getting the classification report
+getClassificationReport(KNeighborsClfPredicted, "KNeighborsClf")
+# Getting number of correct guesses
+getCorrectGuesses(KNeighborsClfPredicted, "KNeighborsClf")
 
 ################ KNN (k=5) End
 
@@ -223,26 +241,14 @@ print("The KNeighborsClf percentage of the correct predictions is: "+str(correct
 from sklearn import svm
 SvmClf = Pipeline([('clf', svm.SVC( kernel='rbf', probability=True)), ])
 SvmClf.fit(XTrainSet, yTrainSet)
-
-SvmClfScore = cross_val_score(SvmClf, XTrainSet, yTrainSet, cv=5)
-print("\nThe 5 fold cross validation score for SvmClf is : "+str(SvmClfScore))
-print("SvmClf: %0.2f accuracy with a standard deviation of %0.2f" % (SvmClfScore.mean(), SvmClfScore.std()))
-
 SvmClfPredicted = SvmClf.predict(XTestSet)
-print("SvmClf: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), SvmClfPredicted.tolist()))
 
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-SvmClfPredictedNew = SvmClfPredicted.tolist()
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == SvmClfPredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for SvmClf")
-print("The SvmClf percentage of the correct predictions is: "+str(correct/total))
+# Getting the cross validations score
+getCrossValScore(SvmClf, "SvmClf")
+# Getting the classification report
+getClassificationReport(SvmClfPredicted, "SvmClf")
+# Getting number of correct guesses
+getCorrectGuesses(SvmClfPredicted, "SvmClf")
 
 ################ SVM (kernel = rbf) End
 
@@ -260,26 +266,14 @@ print("Optimal depth of the decision tree: ",DecisionTreeClassifierClfGirdScore.
 
 DecisionTreeClassifierClf = Pipeline([('clf', DecisionTreeClassifier(max_depth=5)), ])
 DecisionTreeClassifierClf.fit(XTrainSet, yTrainSet)
-
-DecisionTreeClassifierClfScore = cross_val_score(DecisionTreeClassifierClf, XTrainSet, yTrainSet, cv=5)
-print("\nThe 5 fold cross validation score for DecisionTreeClassifierClf is : "+str(DecisionTreeClassifierClfScore))
-print("DecisionTreeClassifierClf: %0.2f accuracy with a standard deviation of %0.2f" % (DecisionTreeClassifierClfScore.mean(), DecisionTreeClassifierClfScore.std()))
-
 DecisionTreeClassifierClfPredicted = DecisionTreeClassifierClf.predict(XTestSet)
-print("DecisionTreeClassifierClf: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), DecisionTreeClassifierClfPredicted.tolist()))
 
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-DecisionTreeClassifierClfPredictedNew = DecisionTreeClassifierClfPredicted.tolist()
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == DecisionTreeClassifierClfPredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for DecisionTreeClassifierClf")
-print("The DecisionTreeClassifierClf percentage of the correct predictions is: "+str(correct/total))
+# Getting the cross validations score
+getCrossValScore(DecisionTreeClassifierClf, "DecisionTreeClassifierClf")
+# Getting the classification report
+getClassificationReport(DecisionTreeClassifierClfPredicted, "DecisionTreeClassifierClf")
+# Getting number of correct guesses
+getCorrectGuesses(DecisionTreeClassifierClfPredicted, "DecisionTreeClassifierClf")
 
 ################ DT End
 
@@ -288,26 +282,14 @@ print("The DecisionTreeClassifierClf percentage of the correct predictions is: "
 from sklearn.ensemble import GradientBoostingClassifier
 GradientBoostingClf = Pipeline([('clf', GradientBoostingClassifier()), ])
 GradientBoostingClf.fit(XTrainSet, yTrainSet)
-
-GradientBoostingClfScore = cross_val_score(GradientBoostingClf, XTrainSet, yTrainSet, cv=5)
-print("\nThe 5 fold cross validation score for GradientBoostingClf is : "+str(GradientBoostingClfScore))
-print("GradientBoostingClf: %0.2f accuracy with a standard deviation of %0.2f" % (GradientBoostingClfScore.mean(), GradientBoostingClfScore.std()))
-
 GradientBoostingClfPredicted = GradientBoostingClf.predict(XTestSet)
-print("GradientBoostingClf: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), GradientBoostingClfPredicted.tolist()))
 
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-GradientBoostingClfPredictedNew = GradientBoostingClfPredicted.tolist()
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == GradientBoostingClfPredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for GradientBoostingClf")
-print("The GradientBoostingClf percentage of the correct predictions is: "+str(correct/total))
+# Getting the cross validations score
+getCrossValScore(GradientBoostingClf, "GradientBoostingClf")
+# Getting the classification report
+getClassificationReport(GradientBoostingClfPredicted, "GradientBoostingClf")
+# Getting number of correct guesses
+getCorrectGuesses(GradientBoostingClfPredicted, "GradientBoostingClf")
 
 ################ XGboot End
 
@@ -315,49 +297,25 @@ from sklearn.ensemble import VotingClassifier
 
 MajorityVotingSoftClf = VotingClassifier(estimators=[('KNN', KNeighborsClf), ('SVM', SvmClf), ('DT', DecisionTreeClassifierClf), ('XGboost', GradientBoostingClf)], voting='soft')
 MajorityVotingSoftClf = MajorityVotingSoftClf.fit(XTrainSet, yTrainSet)
+MajorityVotingSoftClfPredicted = MajorityVotingSoftClf.predict(XTestSet)
 
 MajorityVotingHardClf = VotingClassifier(estimators=[('KNN', KNeighborsClf), ('SVM', SvmClf), ('DT', DecisionTreeClassifierClf), ('XGboost', GradientBoostingClf)], voting='hard')
 MajorityVotingHardClf = MajorityVotingHardClf.fit(XTrainSet, yTrainSet)
-
-MajorityVotingSoftClfScore = cross_val_score(MajorityVotingSoftClf, XTrainSet, yTrainSet, cv=5)
-print("\nThe 5 fold cross validation score for MajorityVotingSoftClf is : "+str(MajorityVotingSoftClfScore))
-print("MajorityVotingSoftClf: %0.2f accuracy with a standard deviation of %0.2f" % (MajorityVotingSoftClfScore.mean(), MajorityVotingSoftClfScore.std()))
-
-MajorityVotingSoftClfPredicted = MajorityVotingSoftClf.predict(XTestSet)
-print("MajorityVotingSoftClf: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), MajorityVotingSoftClfPredicted.tolist()))
-
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-MajorityVotingSoftClfPredictedNew = MajorityVotingSoftClfPredicted.tolist()
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == MajorityVotingSoftClfPredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for MajorityVotingSoftClf")
-print("The MajorityVotingSoftClf percentage of the correct predictions is: "+str(correct/total))
-
-MajorityVotingHardClfScore = cross_val_score(MajorityVotingHardClf, XTrainSet, yTrainSet, cv=5)
-print("\nThe 5 fold cross validation score for MajorityVotingHardClf is : "+str(MajorityVotingHardClfScore))
-print("MajorityVotingHardClf: %0.2f accuracy with a standard deviation of %0.2f" % (MajorityVotingHardClfScore.mean(), MajorityVotingHardClfScore.std()))
-
 MajorityVotingHardClfPredicted = MajorityVotingHardClf.predict(XTestSet)
-print("MajorityVotingHardClf: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), MajorityVotingHardClfPredicted.tolist()))
 
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-MajorityVotingHardClfPredictedNew = MajorityVotingHardClfPredicted.tolist()
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == MajorityVotingHardClfPredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for MajorityVotingHardClf")
-print("The MajorityVotingHardClf percentage of the correct predictions is: "+str(correct/total))
+# Getting the cross validations score
+getCrossValScore(MajorityVotingSoftClf, "MajorityVotingSoftClf")
+# Getting the classification report
+getClassificationReport(MajorityVotingSoftClfPredicted, "MajorityVotingSoftClf")
+# Getting number of correct guesses
+getCorrectGuesses(MajorityVotingSoftClfPredicted, "MajorityVotingSoftClfPredicted")
+
+# Getting the cross validations score
+getCrossValScore(MajorityVotingHardClf, "MajorityVotingHardClf")
+# Getting the classification report
+getClassificationReport(MajorityVotingHardClfPredicted, "MajorityVotingHardClf")
+# Getting number of correct guesses
+getCorrectGuesses(MajorityVotingHardClfPredicted, "MajorityVotingHardClf")
 
 ################################## C(1) End
 
@@ -404,20 +362,10 @@ print('\nAccuracy of kerasModelReLU: %.2f' % (accuracy*100))
 # Getting classification report
 kerasModelPredicted = kerasModel.predict(XTestSet)
 kerasModelPredicted = [round(x[0]) for x in kerasModelPredicted]
-print("kerasModelReLU: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), kerasModelPredicted))
-
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-kerasModelPredictedNew = kerasModelPredicted
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == kerasModelPredicted[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for kerasModelReLU")
-print("The kerasModelReLU percentage of the correct predictions is: "+str(correct/total))
+# Getting the classification report
+getClassificationReport(kerasModelPredicted, "kerasModelReLU")
+# Getting number of correct guesses
+getCorrectGuesses(kerasModelPredicted, "kerasModelReLU")
 
 # Getting model accuracy
 _, accuracy2 = kerasModel2.evaluate(XTrainSet, yTrainSet)
@@ -426,20 +374,10 @@ print('\nAccuracy of kerasModelTanh: %.2f' % (accuracy2*100))
 # Getting classification report
 kerasModel2Predicted = kerasModel2.predict(XTestSet)
 kerasModel2Predicted = [round(x[0]) for x in kerasModel2Predicted]
-print("kerasModelTanh: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), kerasModel2Predicted))
-
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-kerasModel2PredictedNew = kerasModel2Predicted
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == kerasModel2PredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for kerasModelTanh")
-print("The kerasModelTanh percentage of the correct predictions is: "+str(correct/total))
+# Getting the classification report
+getClassificationReport(kerasModel2Predicted, "kerasModelTanh")
+# Getting number of correct guesses
+getCorrectGuesses(kerasModel2Predicted, "kerasModelTanh")
 
 # Getting model accuracy
 _, accuracy3 = kerasModel3.evaluate(XTrainSet, yTrainSet)
@@ -448,21 +386,16 @@ print('\nAccuracy of kerasModelSigmoid: %.2f' % (accuracy3*100))
 # Getting classification report
 kerasModel3Predicted = kerasModel3.predict(XTestSet)
 kerasModel3Predicted = [round(x[0]) for x in kerasModel3Predicted]
-print("kerasModelSigmoid: Classification report:")
-print(metrics.classification_report(yTestSet.to_numpy().tolist(), kerasModel3Predicted))
-
-# Getting number of correct predictions and percentage
-correct = 0
-total = 0
-yTestSetNew = yTestSet.tolist()
-kerasModel3PredictedNew = kerasModel3Predicted
-for result in range(len(yTestSetNew)):
-    total = total + 1
-    if yTestSetNew[result] == kerasModel3PredictedNew[result]:
-        correct = correct + 1
-print(str(correct)+" correct predictions out of "+str(total)+" for kerasModelSigmoid")
-print("The kerasModelSigmoid percentage of the correct predictions is: "+str(correct/total))
+# Getting the classification report
+getClassificationReport(kerasModel3Predicted, "kerasModelSigmoid")
+# Getting number of correct guesses
+getCorrectGuesses(kerasModel3Predicted, "kerasModelSigmoid")
 
 ################################## D(1) End
 
-######################################### Model Development II (D) End #################################################
+########################################### Model Comparison (E) Start #################################################
+
+################################## E(1) Start
+################################## E(1) End
+
+############################################# Model Comparison (E) End #################################################
