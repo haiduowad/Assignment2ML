@@ -189,6 +189,7 @@ XTrainSet, XTestSet, yTrainSet, yTestSet = train_test_split(xDataFrame,yDataFram
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_val_score
 from sklearn import metrics
+from sklearn.metrics import confusion_matrix
 
 # Function that gets the cross validation score
 def getCrossValScore(clfName, name):
@@ -233,6 +234,10 @@ getCrossValScore(KNeighborsClf, "KNeighborsClf")
 getClassificationReport(KNeighborsClfPredicted, "KNeighborsClf")
 # Getting number of correct guesses
 getCorrectGuesses(KNeighborsClfPredicted, "KNeighborsClf")
+# Getting the confusion matrix
+KNeighborsClfCm = confusion_matrix(yTestSet.to_numpy().tolist(), KNeighborsClfPredicted)
+print("Confusion matrix for KNeighborsClf:")
+print(KNeighborsClfCm)
 
 ################ KNN (k=5) End
 
@@ -249,6 +254,10 @@ getCrossValScore(SvmClf, "SvmClf")
 getClassificationReport(SvmClfPredicted, "SvmClf")
 # Getting number of correct guesses
 getCorrectGuesses(SvmClfPredicted, "SvmClf")
+# Getting the confusion matrix
+SvmClfCm = confusion_matrix(yTestSet.to_numpy().tolist(), SvmClfPredicted)
+print("Confusion matrix for SvmClf:")
+print(SvmClfCm)
 
 ################ SVM (kernel = rbf) End
 
@@ -274,6 +283,10 @@ getCrossValScore(DecisionTreeClassifierClf, "DecisionTreeClassifierClf")
 getClassificationReport(DecisionTreeClassifierClfPredicted, "DecisionTreeClassifierClf")
 # Getting number of correct guesses
 getCorrectGuesses(DecisionTreeClassifierClfPredicted, "DecisionTreeClassifierClf")
+# Getting the confusion matrix
+DecisionTreeClassifierClfCm = confusion_matrix(yTestSet.to_numpy().tolist(), DecisionTreeClassifierClfPredicted)
+print("Confusion matrix for DecisionTreeClassifierClf:")
+print(DecisionTreeClassifierClfCm)
 
 ################ DT End
 
@@ -290,6 +303,10 @@ getCrossValScore(GradientBoostingClf, "GradientBoostingClf")
 getClassificationReport(GradientBoostingClfPredicted, "GradientBoostingClf")
 # Getting number of correct guesses
 getCorrectGuesses(GradientBoostingClfPredicted, "GradientBoostingClf")
+# Getting the confusion matrix
+GradientBoostingClfCm = confusion_matrix(yTestSet.to_numpy().tolist(), GradientBoostingClfPredicted)
+print("Confusion matrix for GradientBoostingClf:")
+print(GradientBoostingClfCm)
 
 ################ XGboot End
 
@@ -309,6 +326,10 @@ getCrossValScore(MajorityVotingSoftClf, "MajorityVotingSoftClf")
 getClassificationReport(MajorityVotingSoftClfPredicted, "MajorityVotingSoftClf")
 # Getting number of correct guesses
 getCorrectGuesses(MajorityVotingSoftClfPredicted, "MajorityVotingSoftClfPredicted")
+# Getting the confusion matrix
+MajorityVotingSoftClfCm = confusion_matrix(yTestSet.to_numpy().tolist(), MajorityVotingSoftClfPredicted)
+print("Confusion matrix for MajorityVotingSoftClf:")
+print(MajorityVotingSoftClfCm)
 
 # Getting the cross validations score
 getCrossValScore(MajorityVotingHardClf, "MajorityVotingHardClf")
@@ -316,6 +337,10 @@ getCrossValScore(MajorityVotingHardClf, "MajorityVotingHardClf")
 getClassificationReport(MajorityVotingHardClfPredicted, "MajorityVotingHardClf")
 # Getting number of correct guesses
 getCorrectGuesses(MajorityVotingHardClfPredicted, "MajorityVotingHardClf")
+# Getting the confusion matrix
+MajorityVotingHardClfCm = confusion_matrix(yTestSet.to_numpy().tolist(), MajorityVotingHardClfPredicted)
+print("Confusion matrix for MajorityVotingHardClf:")
+print(MajorityVotingHardClfCm)
 
 ################################## C(1) End
 
@@ -366,6 +391,10 @@ kerasModelPredicted = [round(x[0]) for x in kerasModelPredicted]
 getClassificationReport(kerasModelPredicted, "kerasModelReLU")
 # Getting number of correct guesses
 getCorrectGuesses(kerasModelPredicted, "kerasModelReLU")
+# Getting the confusion matrix
+kerasModelCm = confusion_matrix(yTestSet.to_numpy().tolist(), kerasModelPredicted)
+print("Confusion matrix for kerasModelReLU:")
+print(kerasModelCm)
 
 # Getting model accuracy
 _, accuracy2 = kerasModel2.evaluate(XTrainSet, yTrainSet)
@@ -378,6 +407,10 @@ kerasModel2Predicted = [round(x[0]) for x in kerasModel2Predicted]
 getClassificationReport(kerasModel2Predicted, "kerasModelTanh")
 # Getting number of correct guesses
 getCorrectGuesses(kerasModel2Predicted, "kerasModelTanh")
+# Getting the confusion matrix
+kerasModel2Cm = confusion_matrix(yTestSet.to_numpy().tolist(), kerasModel2Predicted)
+print("Confusion matrix for kerasModelTanh:")
+print(kerasModel2Cm)
 
 # Getting model accuracy
 _, accuracy3 = kerasModel3.evaluate(XTrainSet, yTrainSet)
@@ -390,12 +423,35 @@ kerasModel3Predicted = [round(x[0]) for x in kerasModel3Predicted]
 getClassificationReport(kerasModel3Predicted, "kerasModelSigmoid")
 # Getting number of correct guesses
 getCorrectGuesses(kerasModel3Predicted, "kerasModelSigmoid")
+# Getting the confusion matrix
+kerasModel3Cm = confusion_matrix(yTestSet.to_numpy().tolist(), kerasModel3Predicted)
+print("Confusion matrix for kerasModelSigmoid:")
+print(kerasModel3Cm)
 
 ################################## D(1) End
 
 ########################################### Model Comparison (E) Start #################################################
 
 ################################## E(1) Start
+
+# def getReportParameters(clfName):
+#     total = sum(sum(clfName))
+#     accuracy = (clfName[0, 0] + clfName[1, 1]) / clfName
+#     percision = clfName[1, 1] / (clfName[1, 1] + clfName[0, 1])
+#     recall = clfName[1, 1] / (clfName[1, 0] + clfName[1, 1])
+#     f1 = 2 * (recall * percision) / (recall + percision)
+#     support = clfName[0, 0] / (clfName[0, 0] + clfName[0, 1])
+#     return total, accuracy, percision, recall, f1, support
+#
+# KNeighborsClfTotal, KNeighborsClfAccuracy, KNeighborsClfPercision, KNeighborsClfRecall, KNeighborsClfF1, KNeighborsClfSupport = getReportParameters(KNeighborsClf)
+#
+# print(KNeighborsClfTotal)
+# print(KNeighborsClfAccuracy)
+# print(KNeighborsClfPercision)
+# print(KNeighborsClfRecall)
+# print(KNeighborsClfF1)
+# print(KNeighborsClfSupport)
+
 ################################## E(1) End
 
 ############################################# Model Comparison (E) End #################################################
